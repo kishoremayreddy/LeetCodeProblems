@@ -1,5 +1,7 @@
 package com.sai.challenge;
 
+import java.util.Arrays;
+
 public class MergeSortedLinkedList {
 
     public static LinkedListNode merge_sorted(
@@ -8,45 +10,26 @@ public class MergeSortedLinkedList {
 
         // if both lists are empty then merged list is also empty
         // if one of the lists is empty then other is the merged list
-        if (head1 == null) {
-            return head2;
-        } else if (head2 == null) {
-            return head1;
-        }
+        // maintain an unchanging reference to node ahead of the return node.
+        LinkedListNode dummy = new LinkedListNode(-1);
 
-
-        LinkedListNode mergedHead = null;
-        if (head1.data <= head2.data) {
-            mergedHead = head1;
-            head1 = head1.next;
-        } else {
-            mergedHead = head2;
-            head2 = head2.next;
-        }
-
-        LinkedListNode mergedTail = mergedHead;
-
+        LinkedListNode head = dummy;
         while (head1 != null && head2 != null) {
-            LinkedListNode temp = null;
             if (head1.data <= head2.data) {
-                temp = head1;
+                dummy.next = head1;
                 head1 = head1.next;
             } else {
-                temp = head2;
+                dummy.next = head2;
                 head2 = head2.next;
             }
-
-            mergedTail.next = temp;
-            mergedTail = temp;
+            dummy = dummy.next;
         }
 
-        if (head1 != null) {
-            mergedTail.next = head1;
-        } else if (head2 != null) {
-            mergedTail.next = head2;
-        }
+        // exactly one of l1 and l2 can be non-null at this point, so connect
+        // the non-null list to the end of the merged list.
+        dummy.next = head1 == null ? head2 : head1;
 
-        return mergedHead;
+        return head.next;
 
     }
     public static void main(String[] args) {
